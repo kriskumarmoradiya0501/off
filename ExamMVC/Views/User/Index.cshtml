@@ -1,0 +1,51 @@
+@model List<ExamMVC.t_User4>
+
+<a href="/User/Logout">Logout</a>
+
+<h2>Welcome, @Context.Session.GetString("UserName")</h2>
+
+<p>
+    Email: @Context.Session.GetString("UserEmail")
+</p>
+<h2>User List</h2>
+
+<a href="/User/Create">Create New User</a>
+
+<br />
+<br />
+
+<table border="1 solid">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Mobile</th>
+            <th>Image</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.c_userid</td>
+                <td>@user.c_name</td>
+                <td>@user.c_email</td>
+                <td>@user.c_mobile</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(user.c_image))
+                    {
+                        <img src="~/images/@user.c_image" width="80" height="80" />
+                    }
+                </td>
+                <td>
+                    <a href="/User/Edit/@user.c_userid">Edit</a>
+                    |
+                    <a href="/User/Delete/@user.c_userid">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

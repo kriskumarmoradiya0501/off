@@ -1,0 +1,43 @@
+@model ExamMVC.LoginModel
+
+<h2>Login</h2>
+
+<form asp-controller="User"
+      asp-action="Login"
+      method="post">
+
+    <div>
+        <label asp-for="c_email"></label>
+
+        <input asp-for="c_email" />
+
+        <span asp-validation-for="c_email"></span>
+    </div>
+
+    <br />
+
+    <div>
+        <label asp-for="c_password"></label>
+
+        <input asp-for="c_password" />
+
+        <span asp-validation-for="c_password"></span>
+    </div>
+
+    <br />
+
+    <div>
+        <span asp-validation-summary="ModelOnly"></span>
+    </div>
+
+    <br />
+
+    <button type="submit">
+        Login
+    </button>
+
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

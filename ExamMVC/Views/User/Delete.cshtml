@@ -1,0 +1,42 @@
+@model ExamMVC.t_User4
+
+<h2>Delete User</h2>
+
+<h3>Are you sure you want to delete this user?</h3>
+
+<div>
+    <p>
+        <strong>ID:</strong>
+        @Model.c_userid
+    </p>
+
+    <p>
+        <strong>Name:</strong>
+        @Model.c_name
+    </p>
+
+    <p>
+        <strong>Email:</strong>
+        @Model.c_email
+    </p>
+
+    <p>
+        <strong>Mobile:</strong>
+        @Model.c_mobile
+    </p>
+</div>
+
+<form asp-controller="User"
+      asp-action="DeleteConfirmed"
+      method="post">
+
+    <input type="hidden" asp-for="c_userid" />
+
+    <button type="submit">
+        Yes, Delete
+    </button>
+
+    <a href="/User/Index">
+        Cancel
+    </a>
+</form>

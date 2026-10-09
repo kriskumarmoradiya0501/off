@@ -1,0 +1,13 @@
+# .NET build output
+**/bin/
+**/obj/
+.vs/
+.idea/
+
+# Local connection settings may contain database credentials
+**/appsettings*.json
+!**/appsettings.example.json
+
+# Test and publish output
+**/TestResults/
+**/publish/

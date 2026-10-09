@@ -1,0 +1,28 @@
+@model examfinal.Models.AdminModel
+@{
+    ViewData["Title"] = "Admin registration";
+}
+
+<section class="auth-card">
+    <h1>Admin registration</h1>
+    <p class="muted">Create an account to manage your users.</p>
+
+    <form asp-action="Register" method="post">
+        <div asp-validation-summary="ModelOnly" class="validation"></div>
+        <label asp-for="c_email">Email</label>
+        <input asp-for="c_email" autocomplete="email" />
+        <span asp-validation-for="c_email" class="validation"></span>
+
+        <label asp-for="c_password">Password</label>
+        <input asp-for="c_password" autocomplete="new-password" />
+        <span asp-validation-for="c_password" class="validation"></span>
+
+        <button type="submit">Register</button>
+    </form>
+
+    <p class="muted">Already registered? <a asp-action="Login">Log in</a></p>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

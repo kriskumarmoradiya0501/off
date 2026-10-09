@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - examfinal</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="site-header">
+        <nav>
+            <a asp-controller="Admin" asp-action="Login" class="brand">examfinal</a>
+            @if (Context.Session.GetInt32("AdminId") == null)
+            {
+                <div class="nav-links">
+                    <a asp-controller="Admin" asp-action="Login">Login</a>
+                    <a asp-controller="Admin" asp-action="Register">Register</a>
+                </div>
+            }
+        </nav>
+    </header>
+    <main class="container">
+            @RenderBody()
+    </main>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

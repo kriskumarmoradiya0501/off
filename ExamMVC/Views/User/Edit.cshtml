@@ -1,0 +1,360 @@
+@model ExamMVC.t_User4
+
+<h2>Edit User</h2>
+
+<form asp-controller="User"
+      asp-action="Update"
+      method="post"
+      enctype="multipart/form-data">
+
+    <!-- User ID -->
+    <input type="hidden" asp-for="c_userid" />
+
+    <!-- Existing Image -->
+    <input type="hidden" asp-for="c_image" />
+
+
+    <!-- ========================= -->
+    <!-- NAME -->
+    <!-- ========================= -->
+
+    <div>
+        <label asp-for="c_name"></label>
+
+        <input asp-for="c_name" />
+
+        <span asp-validation-for="c_name"></span>
+    </div>
+
+    <br />
+
+
+    <!-- ========================= -->
+    <!-- EMAIL -->
+    <!-- ========================= -->
+
+    <div>
+        <label asp-for="c_email"></label>
+
+        <input asp-for="c_email" />
+
+        <span asp-validation-for="c_email"></span>
+    </div>
+
+    <br />
+
+
+    <!-- ========================= -->
+    <!-- MOBILE -->
+    <!-- ========================= -->
+
+    <div>
+        <label asp-for="c_mobile"></label>
+
+        <input asp-for="c_mobile" />
+
+        <span asp-validation-for="c_mobile"></span>
+    </div>
+
+    <br />
+
+
+    <!-- ========================= -->
+    <!-- PASSWORD -->
+    <!-- ========================= -->
+
+    <div>
+        <label asp-for="c_password"></label>
+
+        <input asp-for="c_password" />
+
+        <span asp-validation-for="c_password"></span>
+    </div>
+
+    <br />
+
+
+    <!-- ========================= -->
+    <!-- CONFIRM PASSWORD -->
+    <!-- ========================= -->
+
+    <div>
+        <label asp-for="c_confirm_password"></label>
+
+        <input asp-for="c_confirm_password" />
+
+        <span asp-validation-for="c_confirm_password"></span>
+    </div>
+
+    <br />
+
+
+    <!-- ========================= -->
+    <!-- GENDER -->
+    <!-- ========================= -->
+
+    <div>
+
+        <label>Gender</label>
+
+        <br />
+
+        <input type="radio"
+               asp-for="c_gender"
+               value="Male" />
+
+        Male
+
+        <input type="radio"
+               asp-for="c_gender"
+               value="Female" />
+
+        Female
+
+        <input type="radio"
+               asp-for="c_gender"
+               value="Other" />
+
+        Other
+
+        <br />
+
+        <span asp-validation-for="c_gender"></span>
+
+    </div>
+
+    <br />
+
+
+    <!-- ========================= -->
+    <!-- HOBBIES -->
+    <!-- ========================= -->
+
+    <div>
+
+        <label>Hobbies</label>
+
+        <br />
+
+        <input type="checkbox"
+               name="c_hobbyList"
+               value="Reading"
+               @(Model.c_hobbyList.Contains("Reading")
+                   ? "checked"
+                   : "") />
+
+        Reading
+
+        <br />
+
+        <input type="checkbox"
+               name="c_hobbyList"
+               value="Coding"
+               @(Model.c_hobbyList.Contains("Coding")
+                   ? "checked"
+                   : "") />
+
+        Coding
+
+        <br />
+
+        <input type="checkbox"
+               name="c_hobbyList"
+               value="Cricket"
+               @(Model.c_hobbyList.Contains("Cricket")
+                   ? "checked"
+                   : "") />
+
+        Cricket
+
+        <br />
+
+        <input type="checkbox"
+               name="c_hobbyList"
+               value="Music"
+               @(Model.c_hobbyList.Contains("Music")
+                   ? "checked"
+                   : "") />
+
+        Music
+
+    </div>
+
+    <br />
+
+
+    <!-- ========================= -->
+    <!-- DEPARTMENT -->
+    <!-- ========================= -->
+
+    <div>
+
+        <label asp-for="c_departmentid">
+            Department
+        </label>
+
+        <select asp-for="c_departmentid">
+
+            <option value="">
+                -- Select Department --
+            </option>
+
+            @foreach (var department in ViewBag.Departments)
+            {
+                <option value="@department.c_departmentid">
+                    @department.c_departmentname
+                </option>
+            }
+
+        </select>
+
+        <span asp-validation-for="c_departmentid"></span>
+
+    </div>
+
+    <br />
+
+
+    <!-- ========================= -->
+    <!-- DATE OF BIRTH -->
+    <!-- ========================= -->
+
+    <div>
+
+        <label asp-for="c_dob"></label>
+
+        <input asp-for="c_dob"
+               type="date" />
+
+        <span asp-validation-for="c_dob"></span>
+
+    </div>
+
+    <br />
+
+
+    <!-- ========================= -->
+    <!-- AGE -->
+    <!-- ========================= -->
+
+    <div>
+
+        <label asp-for="c_age"></label>
+
+        <input asp-for="c_age"
+               type="number" />
+
+        <span asp-validation-for="c_age"></span>
+
+    </div>
+
+    <br />
+
+
+    <!-- ========================= -->
+    <!-- ADDRESS -->
+    <!-- ========================= -->
+
+    <div>
+
+        <label asp-for="c_address"></label>
+
+        <textarea asp-for="c_address"></textarea>
+
+        <span asp-validation-for="c_address"></span>
+
+    </div>
+
+    <br />
+
+
+    <!-- ========================= -->
+    <!-- CURRENT IMAGE -->
+    <!-- ========================= -->
+
+    <div>
+
+        <label>Current Image</label>
+
+        <br />
+
+        @if (!string.IsNullOrEmpty(Model.c_image))
+        {
+            <img src="~/images/@Model.c_image"
+                 width="100"
+                 height="100" />
+        }
+        else
+        {
+            <p>No image uploaded.</p>
+        }
+
+    </div>
+
+    <br />
+
+
+    <!-- ========================= -->
+    <!-- CHANGE IMAGE -->
+    <!-- ========================= -->
+
+    <div>
+
+        <label asp-for="c_imageFile">
+            Change Image
+        </label>
+
+        <input asp-for="c_imageFile"
+               type="file"
+               accept="image/*" />
+
+    </div>
+
+    <br />
+
+
+    <!-- ========================= -->
+    <!-- STATUS -->
+    <!-- ========================= -->
+
+    <div>
+
+        <label asp-for="c_status">
+            Status
+        </label>
+
+        <select asp-for="c_status">
+
+            <option value="true">
+                Active
+            </option>
+
+            <option value="false">
+                Inactive
+            </option>
+
+        </select>
+
+    </div>
+
+    <br />
+
+
+    <!-- ========================= -->
+    <!-- BUTTONS -->
+    <!-- ========================= -->
+
+    <button type="submit">
+        Update User
+    </button>
+
+    <a href="/User/Index">
+        Cancel
+    </a>
+
+</form>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

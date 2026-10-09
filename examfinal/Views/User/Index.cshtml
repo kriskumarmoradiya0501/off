@@ -1,0 +1,249 @@
+@using examfinal.Models
+@{
+    ViewData["Title"] = "User management";
+    var departments = ViewBag.Departments as List<DepartmentModel> ?? new List<DepartmentModel>();
+}
+
+<div class="page-heading">
+    <div>
+        <h1>User management</h1>
+        <p class="muted">Signed in as @Context.Session.GetString("AdminEmail")</p>
+    </div>
+    <form asp-controller="Admin" asp-action="Logout" method="post">
+        <button class="button-secondary" type="submit">Log out</button>
+    </form>
+</div>
+
+@Html.AntiForgeryToken()
+
+<section class="panel">
+    <h2 id="form-title">Add user</h2>
+    @if (departments.Count == 0)
+    {
+        <p class="notice">No departments found. Add at least one row to t_department6 before adding users.</p>
+    }
+    <form id="user-form">
+        <input type="hidden" id="c_userid" name="c_userid" value="0" />
+
+        <div class="form-grid">
+            <div>
+                <label for="c_name">Name</label>
+                <input id="c_name" name="c_name" maxlength="100" required />
+            </div>
+            <div>
+                <label for="c_email">Email</label>
+                <input id="c_email" name="c_email" type="email" maxlength="150" required />
+            </div>
+            <div>
+                <label for="c_mobile">Mobile</label>
+                <input id="c_mobile" name="c_mobile" maxlength="15" required />
+            </div>
+            <div>
+                <label for="c_gender">Gender</label>
+                <select id="c_gender" name="c_gender" required>
+                    <option value="">Select gender</option>
+                    <option>Female</option>
+                    <option>Male</option>
+                    <option>Other</option>
+                </select>
+            </div>
+            <div>
+                <label for="c_hobbies">Hobbies</label>
+                <input id="c_hobbies" name="c_hobbies" maxlength="200" placeholder="Reading, music" />
+            </div>
+            <div>
+                <label for="c_departmentid">Department</label>
+                <select id="c_departmentid" name="c_departmentid" required>
+                    <option value="">Select department</option>
+                    @foreach (var department in departments)
+                    {
+                        <option value="@department.c_departmentid">@department.c_departmentname</option>
+                    }
+                </select>
+            </div>
+            <div>
+                <label for="c_dob">Date of birth</label>
+                <input id="c_dob" name="c_dob" type="date" required />
+            </div>
+            <div>
+                <label for="c_age">Age (18–60)</label>
+                <input id="c_age" name="c_age" type="number" min="18" max="60" />
+            </div>
+            <div>
+                <label for="c_image">Image path</label>
+                <input id="c_image" name="c_image" maxlength="200" />
+            </div>
+            <div class="wide">
+                <label for="c_address">Address</label>
+                <textarea id="c_address" name="c_address" maxlength="500" rows="2"></textarea>
+            </div>
+            <div class="check-field">
+                <input id="c_status" name="c_status" type="checkbox" value="true" checked />
+                <input name="c_status" type="hidden" value="false" />
+                <label for="c_status">Active</label>
+            </div>
+        </div>
+
+        <p id="form-message" class="validation" role="status"></p>
+        <div class="form-actions">
+            <button id="save-button" type="submit">Save user</button>
+            <button id="cancel-button" class="button-secondary" type="button" hidden>Cancel edit</button>
+        </div>
+    </form>
+</section>
+
+<section class="panel">
+    <h2>Users</h2>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Mobile</th>
+                    <th>Department</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyData"></tbody>
+        </table>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            loadUsers();
+
+            $("#user-form").submit(function (event) {
+                event.preventDefault();
+                saveUser();
+            });
+
+            $("#cancel-button").click(function () {
+                clearForm();
+            });
+        });
+
+        function loadUsers() {
+            $.ajax({
+                url: "/User/GetAll",
+                type: "GET",
+                success: function (response) {
+                    $("#tbodyData").empty();
+
+                    $.each(response.data, function (index, user) {
+                        var row = $("<tr>");
+                        $("<td>").text(user.c_name).appendTo(row);
+                        $("<td>").text(user.c_email).appendTo(row);
+                        $("<td>").text(user.c_mobile).appendTo(row);
+                        $("<td>").text(user.c_departmentname).appendTo(row);
+                        $("<td>").text(user.c_status ? "Active" : "Inactive").appendTo(row);
+
+                        var actions = $("<td>");
+                        $("<button>", {
+                            type: "button",
+                            class: "button-secondary",
+                            text: "Edit"
+                        }).click(function () {
+                            editUser(user.c_userid);
+                        }).appendTo(actions);
+                        $("<button>", {
+                            type: "button",
+                            class: "button-danger",
+                            text: "Delete"
+                        }).click(function () {
+                            deleteUser(user.c_userid);
+                        }).appendTo(actions);
+                        actions.appendTo(row);
+                        row.appendTo("#tbodyData");
+                    });
+                },
+                error: showAjaxError
+            });
+        }
+
+        function editUser(id) {
+            $.ajax({
+                url: "/User/GetById/" + id,
+                type: "GET",
+                success: function (response) {
+                    var user = response.data;
+                    $("#c_userid").val(user.c_userid);
+                    $("#c_name").val(user.c_name);
+                    $("#c_email").val(user.c_email);
+                    $("#c_mobile").val(user.c_mobile);
+                    $("#c_gender").val(user.c_gender);
+                    $("#c_hobbies").val(user.c_hobbies);
+                    $("#c_departmentid").val(user.c_departmentid);
+                    $("#c_dob").val(user.c_dob.substring(0, 10));
+                    $("#c_age").val(user.c_age);
+                    $("#c_address").val(user.c_address);
+                    $("#c_image").val(user.c_image);
+                    $("#c_status").prop("checked", user.c_status);
+                    $("#form-title").text("Edit user");
+                    $("#save-button").text("Update user");
+                    $("#cancel-button").prop("hidden", false);
+                    $("#form-message").text("");
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                },
+                error: showAjaxError
+            });
+        }
+
+        function saveUser() {
+            $("#form-message").text("");
+
+            $.ajax({
+                url: "/User/Save",
+                type: "POST",
+                data: $("#user-form").serialize(),
+                headers: {
+                    "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function (response) {
+                    $("#form-message").removeClass("validation").addClass("success").text(response.message);
+                    clearForm();
+                    loadUsers();
+                },
+                error: showAjaxError
+            });
+        }
+
+        function deleteUser(id) {
+            if (!confirm("Are you sure you want to delete this user?")) {
+                return;
+            }
+
+            $.ajax({
+                url: "/User/Delete/" + id,
+                type: "DELETE",
+                headers: {
+                    "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function (response) {
+                    $("#form-message").removeClass("validation").addClass("success").text(response.message);
+                    loadUsers();
+                },
+                error: showAjaxError
+            });
+        }
+
+        function clearForm() {
+            $("#user-form")[0].reset();
+            $("#c_userid").val("0");
+            $("#c_status").prop("checked", true);
+            $("#form-title").text("Add user");
+            $("#save-button").text("Save user");
+            $("#cancel-button").prop("hidden", true);
+        }
+
+        function showAjaxError(error) {
+            var message = error.responseJSON && error.responseJSON.message
+                ? error.responseJSON.message
+                : "The request failed. Please try again.";
+            $("#form-message").removeClass("success").addClass("validation").text(message);
+        }
+    </script>
+}

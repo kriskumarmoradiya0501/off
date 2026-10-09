@@ -1,0 +1,33 @@
+@model examfinal.Models.LoginModel
+@{
+    ViewData["Title"] = "Admin login";
+}
+
+<section class="auth-card">
+    <h1>Admin login</h1>
+    <p class="muted">Log in to manage your users.</p>
+
+    @if (TempData["Message"] != null)
+    {
+        <p class="notice">@TempData["Message"]</p>
+    }
+
+    <form asp-action="Login" method="post">
+        <div asp-validation-summary="ModelOnly" class="validation"></div>
+        <label asp-for="c_email">Email</label>
+        <input asp-for="c_email" autocomplete="email" />
+        <span asp-validation-for="c_email" class="validation"></span>
+
+        <label asp-for="c_password">Password</label>
+        <input asp-for="c_password" autocomplete="current-password" />
+        <span asp-validation-for="c_password" class="validation"></span>
+
+        <button type="submit">Log in</button>
+    </form>
+
+    <p class="muted">Need an account? <a asp-action="Register">Register</a></p>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
